@@ -4,7 +4,7 @@ import Login from './pages/login/Login';
 import MicrosoftLogin from './pages/microsoft-login/MicrosoftLogin';
 import GoogleLogin from './pages/google-login/GoogleLogin';
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
@@ -16,5 +16,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;
