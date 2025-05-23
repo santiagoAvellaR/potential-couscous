@@ -1,0 +1,62 @@
+# node modules
+node_modules/
+
+# build output
+dist/
+
+# environment variables
+.env
+.env.local
+.env.*.local
+
+# Vite cache
+.vite/
+
+# local env files
+*.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Test coverage
+coverage/
+
+# Optional REPL history
+.node_repl_history
+
+# Mac system file
+.AppleDouble
+
+# TypeScript cache
+*.tsbuildinfo
+
+# VS Live Share
+.vscode/**/.history/
+
+# parcel-bundler cache
+.cache/
+
+# JetBrains
+*.iml
+out/
