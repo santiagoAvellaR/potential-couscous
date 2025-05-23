@@ -3,6 +3,7 @@ import { Mail, Shield, AlertTriangle } from 'lucide-react';
 
 const EmailBreachChecker: React.FC = () => {
   const [emailInput, setEmailInput] = useState('');
+  
 
   const handleEmailSubmit = () => {
     if (!emailInput.trim()) return;

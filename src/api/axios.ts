@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../env.js';
 import zxcvbn from 'zxcvbn';
+
 export const api = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com',
   headers: {

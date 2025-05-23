@@ -17,7 +17,7 @@ export type MailApi = {
   IsMalware: boolean;
   IsSubscriptionFree: boolean;
   IsStealerLog: boolean;
-};
+} | null;
 
 export type PasswordApi = {
   strength: {
@@ -26,4 +26,4 @@ export type PasswordApi = {
     warning: string;
   };
   pwnedCount: number;
-};
+} | null;
