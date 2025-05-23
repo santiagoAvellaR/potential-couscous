@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, Search, FileText, Shield, Globe, Users, Activity } from 'lucide-react';
 
-const VirusTotalClone: React.FC = () => {
+export default function VirusTotalClone(){
   const [activeTab, setActiveTab] = useState<'file' | 'url' | 'search'>('file');
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -364,5 +364,3 @@ const VirusTotalClone: React.FC = () => {
     </div>
   );
 };
-
-export default VirusTotalClone;
