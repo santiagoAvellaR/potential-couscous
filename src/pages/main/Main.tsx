@@ -1,94 +1,42 @@
-import React, { useState, useRef } from 'react';
-import { Upload, Search, FileText, Shield, Globe, Users, Activity } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Shield, AlertTriangle } from 'lucide-react';
 
-const VirusTotalClone: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'file' | 'url' | 'search'>('file');
-  const [dragActive, setDragActive] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [urlInput, setUrlInput] = useState('');
-  const [searchInput, setSearchInput] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
+const EmailBreachChecker: React.FC = () => {
+  const [emailInput, setEmailInput] = useState('');
+  
 
-  const handleDragEnter = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
+  const handleEmailSubmit = () => {
+    if (!emailInput.trim()) return;
     
-    const files = e.dataTransfer.files;
-    if (files && files[0]) {
-      setSelectedFile(files[0]);
-    }
+    // Aquí se conectaría con la API real de verificación de brechas
+    console.log('Verificando email:', emailInput);
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files[0]) {
-      setSelectedFile(files[0]);
-    }
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
-
-  const handleFileUpload = () => {
-    if (selectedFile) {
-      alert(`Archivo ${selectedFile.name} listo para análisis (demo)`);
-    }
-  };
-
-  const handleUrlSubmit = () => {
-    if (urlInput.trim()) {
-      alert(`URL ${urlInput} lista para análisis (demo)`);
-    }
-  };
-
-  const handleSearch = () => {
-    if (searchInput.trim()) {
-      alert(`Buscando: ${searchInput} (demo)`);
-    }
-  };
-
-  const stats = [
-    { icon: FileText, label: 'Archivos analizados', value: '8,234,567,123' },
-    { icon: Globe, label: 'URLs analizadas', value: '4,567,890,234' },
-    { icon: Users, label: 'Usuarios registrados', value: '567,890' },
-    { icon: Activity, label: 'Análisis hoy', value: '1,234,567' }
-  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-100">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <div className="bg-blue-600 p-2 rounded-lg">
+              <div className="bg-red-600 p-2 rounded-lg">
                 <Shield className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">VirusAnalyzer</h1>
-                <p className="text-sm text-gray-500">Análisis de malware y seguridad</p>
+                <h1 className="text-2xl font-bold text-gray-900">BreachGuard</h1>
+                <p className="text-sm text-gray-500">Verificación de brechas de datos</p>
               </div>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-600 hover:text-blue-600 font-medium">Inicio</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 font-medium">Búsqueda</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 font-medium">API</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 font-medium">Documentos</a>
+              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Inicio</a>
+              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">API</a>
+              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Documentos</a>
+              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Soporte</a>
             </nav>
           </div>
         </div>
@@ -98,216 +46,144 @@ const VirusTotalClone: React.FC = () => {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Analiza archivos y URLs sospechosas
+            Verifica si tu email ha sido comprometido
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Detecta malware, virus y amenazas con más de 70 motores antivirus y 
-            herramientas de análisis de URLs
+            Descubre si tu dirección de correo electrónico ha aparecido en brechas de seguridad o bases de datos filtradas
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-lg p-1 shadow-md">
+        {/* Main Analysis Section */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <div className="text-center mb-8">
+            <Mail className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Verificar Email
+            </h3>
+            <p className="text-gray-600">
+              Ingresa tu dirección de correo para verificar su estado de seguridad
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <input
+              type="email"
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              placeholder="ejemplo@correo.com"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+            />
             <button
-              onClick={() => setActiveTab('file')}
-              className={`px-6 py-3 rounded-md font-medium transition-all ${
-                activeTab === 'file'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-blue-600'
-              }`}
+              onClick={handleEmailSubmit}
+              disabled={!emailInput.trim() || !isValidEmail(emailInput)}
+              className="bg-red-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              <Upload className="w-5 h-5 inline-block mr-2" />
-              Archivo
+              Verificar Email
             </button>
-            <button
-              onClick={() => setActiveTab('url')}
-              className={`px-6 py-3 rounded-md font-medium transition-all ${
-                activeTab === 'url'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-blue-600'
-              }`}
-            >
-              <Globe className="w-5 h-5 inline-block mr-2" />
-              URL
-            </button>
-            <button
-              onClick={() => setActiveTab('search')}
-              className={`px-6 py-3 rounded-md font-medium transition-all ${
-                activeTab === 'search'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-blue-600'
-              }`}
-            >
-              <Search className="w-5 h-5 inline-block mr-2" />
-              Buscar
-            </button>
+          </div>
+
+          {emailInput && !isValidEmail(emailInput) && (
+            <p className="mt-2 text-sm text-red-600">
+              Por favor, ingresa una dirección de correo válida
+            </p>
+          )}
+
+          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-start">
+              <Shield className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
+              <div>
+                <h4 className="font-medium text-blue-900 mb-1">Tu privacidad está protegida</h4>
+                <p className="text-sm text-blue-700">
+                  No almacenamos las direcciones de correo que verificas. La búsqueda se realiza de forma segura y anónima.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Content Area */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          {/* File Upload Tab */}
-          {activeTab === 'file' && (
-            <div>
-              <div
-                className={`border-2 border-dashed rounded-xl p-12 text-center transition-all ${
-                  dragActive
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-300 hover:border-blue-400'
-                }`}
-                onDragEnter={handleDragEnter}
-                onDragLeave={handleDragLeave}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-              >
-                <Upload className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Arrastra y suelta un archivo aquí
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  o haz clic para seleccionar un archivo
-                </p>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-                >
-                  Seleccionar archivo
-                </button>
-                {selectedFile && (
-                  <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-gray-600">Archivo seleccionado:</p>
-                    <p className="font-medium text-gray-900">{selectedFile.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                    <button
-                      onClick={handleFileUpload}
-                      className="mt-3 bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-colors"
-                    >
-                      Analizar archivo
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="mt-6 text-center text-sm text-gray-500">
-                Tamaño máximo: 650MB • Formatos soportados: Todos los tipos de archivo
-              </div>
-            </div>
-          )}
-
-          {/* URL Tab */}
-          {activeTab === 'url' && (
-            <div>
-              <div className="text-center mb-8">
-                <Globe className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Analizar URL
-                </h3>
-                <p className="text-gray-600">
-                  Ingresa una URL para verificar si es maliciosa
-                </p>
-              </div>
-              <div className="flex space-x-4">
-                <input
-                  type="url"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  placeholder="https://ejemplo.com"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <button
-                  onClick={handleUrlSubmit}
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-                >
-                  Analizar
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Search Tab */}
-          {activeTab === 'search' && (
-            <div>
-              <div className="text-center mb-8">
-                <Search className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Buscar análisis previos
-                </h3>
-                <p className="text-gray-600">
-                  Busca por hash, nombre de archivo o URL
-                </p>
-              </div>
-              <div className="flex space-x-4">
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="MD5, SHA1, SHA256, nombre de archivo o URL"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-                <button
-                  onClick={handleSearch}
-                  className="bg-green-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
-                >
-                  Buscar
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Stats Section */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-6 text-center">
-              <stat.icon className="w-10 h-10 text-blue-600 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-900 mb-1">
-                {stat.value}
-              </div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Features */}
-        <div className="mt-16 bg-white rounded-xl shadow-lg p-8">
+        {/* Information Section */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Características principales
+            ¿Qué verificamos?
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4">
-                <Shield className="w-8 h-8 text-blue-600" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="text-center p-4">
+              <div className="bg-red-100 rounded-full p-4 w-16 h-16 mx-auto mb-4">
+                <AlertTriangle className="w-8 h-8 text-red-600" />
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">70+ Motores antivirus</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">Brechas de datos</h4>
               <p className="text-gray-600 text-sm">
-                Análisis completo con múltiples motores de detección
+                Verificamos si tu email aparece en brechas de seguridad conocidas
               </p>
             </div>
-            <div className="text-center">
-              <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4">
-                <Activity className="w-8 h-8 text-green-600" />
+            <div className="text-center p-4">
+              <div className="bg-orange-100 rounded-full p-4 w-16 h-16 mx-auto mb-4">
+                <Mail className="w-8 h-8 text-orange-600" />
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Análisis en tiempo real</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">Bases de datos filtradas</h4>
               <p className="text-gray-600 text-sm">
-                Resultados instantáneos y actualizados constantemente
+                Buscamos tu email en bases de datos comprometidas públicamente
               </p>
             </div>
-            <div className="text-center">
+            <div className="text-center p-4">
               <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4">
-                <Globe className="w-8 h-8 text-purple-600" />
+                <Shield className="w-8 h-8 text-purple-600" />
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">API disponible</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">Historial de seguridad</h4>
               <p className="text-gray-600 text-sm">
-                Integra nuestro servicio en tus aplicaciones
+                Revisamos el historial de exposición de tu dirección de correo
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Security Tips */}
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            Consejos de seguridad
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">Si tu email fue comprometido:</h4>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start">
+                  <span className="text-red-600 mr-2">•</span>
+                  Cambia inmediatamente las contraseñas de todas tus cuentas
+                </li>
+                <li className="flex items-start">
+                  <span className="text-red-600 mr-2">•</span>
+                  Activa la autenticación de dos factores donde sea posible
+                </li>
+                <li className="flex items-start">
+                  <span className="text-red-600 mr-2">•</span>
+                  Revisa tus cuentas bancarias y tarjetas de crédito
+                </li>
+                <li className="flex items-start">
+                  <span className="text-red-600 mr-2">•</span>
+                  Considera usar un gestor de contraseñas
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">Prevención:</h4>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">•</span>
+                  Usa contraseñas únicas para cada servicio
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">•</span>
+                  Mantén tus aplicaciones y navegador actualizados
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">•</span>
+                  Sé cauteloso con los enlaces y archivos adjuntos
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">•</span>
+                  Verifica regularmente la seguridad de tus cuentas
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -319,31 +195,31 @@ const VirusTotalClone: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <div className="bg-blue-600 p-2 rounded-lg">
+                <div className="bg-red-600 p-2 rounded-lg">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-xl font-bold">VirusAnalyzer</span>
+                <span className="text-xl font-bold">BreachGuard</span>
               </div>
               <p className="text-gray-400">
-                Protegiendo el mundo digital con análisis avanzado de malware.
+                Protegiendo tu identidad digital mediante verificación de brechas de datos.
               </p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Servicios</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Análisis de archivos</a></li>
-                <li><a href="#" className="hover:text-white">Análisis de URLs</a></li>
-                <li><a href="#" className="hover:text-white">API</a></li>
-                <li><a href="#" className="hover:text-white">Premium</a></li>
+                <li><a href="#" className="hover:text-white">Verificación de email</a></li>
+                <li><a href="#" className="hover:text-white">API de brechas</a></li>
+                <li><a href="#" className="hover:text-white">Monitoreo continuo</a></li>
+                <li><a href="#" className="hover:text-white">Alertas de seguridad</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Recursos</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Documentación</a></li>
+                <li><a href="#" className="hover:text-white">Guías de seguridad</a></li>
                 <li><a href="#" className="hover:text-white">Blog</a></li>
-                <li><a href="#" className="hover:text-white">Soporte</a></li>
-                <li><a href="#" className="hover:text-white">Comunidad</a></li>
+                <li><a href="#" className="hover:text-white">Centro de ayuda</a></li>
+                <li><a href="#" className="hover:text-white">Base de conocimientos</a></li>
               </ul>
             </div>
             <div>
@@ -357,7 +233,7 @@ const VirusTotalClone: React.FC = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 VirusAnalyzer. Todos los derechos reservados.</p>
+            <p>&copy; 2024 BreachGuard. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>
@@ -365,4 +241,4 @@ const VirusTotalClone: React.FC = () => {
   );
 };
 
-export default VirusTotalClone;
+export default EmailBreachChecker;
