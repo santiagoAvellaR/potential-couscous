@@ -1,22 +1,21 @@
 import { createContext, useContext, useState } from 'react';
 import type { Dispatch, SetStateAction, ReactNode } from 'react';
-import type { MailApi, PasswordApi } from '../types/api';
 
 type ApiContextType = {
-  mailApi: MailApi;
-  setMailApi: Dispatch<SetStateAction<MailApi>>;
-  passwordApi: PasswordApi;
-  setPasswordApi: Dispatch<SetStateAction<PasswordApi>>;
+  mail: string;
+  setMail: Dispatch<SetStateAction<string>>;
+  password: string;
+  setPassword: Dispatch<SetStateAction<string>>;
 };
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
 
 export const ApiProvider = ({ children }: { children: ReactNode }) => {
-  const [mailApi, setMailApi] = useState<MailApi>(null);
-  const [passwordApi, setPasswordApi] = useState<PasswordApi>(null);
+  const [mail, setMail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   return (
-    <ApiContext.Provider value={{ mailApi, setMailApi, passwordApi, setPasswordApi }}>
+    <ApiContext.Provider value={{ mail, setMail, password, setPassword }}>
       {children}
     </ApiContext.Provider>
   );
