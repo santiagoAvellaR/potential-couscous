@@ -9,7 +9,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/BreachGuard" element={<Main />} />
+        <Route path="/breach-guard" element={<Main />} />
         <Route path="/microsoft-login" element={<MicrosoftLogin />} />
         <Route path="/google-login" element={<GoogleLogin />} />
       </Routes>
