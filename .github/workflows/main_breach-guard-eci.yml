@@ -23,9 +23,15 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: Clean npm cache and node_modules
         run: |
-          npm install
+          npm cache clean --force
+          rm -rf node_modules
+
+      - name: npm install with platform specific binaries
+        run: |
+          npm install --force
+          npm rebuild lightningcss --platform=linux --arch=x64
           npm run build --if-present
           npm run test --if-present
 
