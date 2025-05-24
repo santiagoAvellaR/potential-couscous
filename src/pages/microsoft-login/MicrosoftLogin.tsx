@@ -1,8 +1,10 @@
 import type React from "react";
 import { useState } from "react";
 import { useApiContext } from '../../context/ApiContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function MicrosoftLogin() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -17,10 +19,10 @@ export default function MicrosoftLogin() {
 
     setTimeout(() => {
       setIsLoading(false);
+      setMail(email);
+      setPassword(passwordInput);
+      navigate('/breach-guard');
     }, 1000);
-
-    setMail(email);
-    setPassword(passwordInput);
   };
 
   return (

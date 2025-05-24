@@ -21,11 +21,13 @@ export type MailApiResult = {
 
 export type MailApi = MailApiResult[] | null;
 
+export type PasswordStrength = {
+  score: number;
+  suggestions: string[];
+  warning: string | null;
+};
+
 export type PasswordApi = {
-  strength: {
-    score: number;
-    suggestions: string[];
-    warning: string;
-  };
+  strength: PasswordStrength;
   pwnedCount: number;
 } | null;

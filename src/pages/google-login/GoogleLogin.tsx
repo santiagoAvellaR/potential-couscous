@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useApiContext } from '../../context/ApiContext';
+import { useNavigate } from 'react-router-dom';
 
 const GoogleLogin: React.FC = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +13,6 @@ const GoogleLogin: React.FC = () => {
 
   const { setMail, setPassword } = useApiContext();
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !passwordInput.trim()) return;
@@ -19,10 +20,10 @@ const GoogleLogin: React.FC = () => {
     
     setTimeout(() => {
       setIsLoading(false);
+      setMail(email);
+      setPassword(passwordInput);
+      navigate('/breach-guard');
     }, 1000);
-
-    setMail(email);
-    setPassword(passwordInput);    
   };
 
   const handleForgotPassword = () => {

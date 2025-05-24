@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Shield, AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { emailBranches } from '../../api/axios';
 import type { MailApi, MailApiResult } from '../../types/api';
+import { useApiContext } from '../../context/ApiContext';
+import { Link } from 'react-router-dom';
 
 const EmailBreachChecker: React.FC = () => {
+  const { mail: savedEmail } = useApiContext();
   const [emailInput, setEmailInput] = useState('');
   const [breaches, setBreaches] = useState<MailApi>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -11,13 +14,21 @@ const EmailBreachChecker: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const handleEmailSubmit = async () => {
-    if (!emailInput.trim()) return;
+  useEffect(() => {
+    if (savedEmail) {
+      setEmailInput(savedEmail);
+      handleEmailSubmit(savedEmail);
+    }
+  }, [savedEmail]);
+
+  const handleEmailSubmit = async (email?: string) => {
+    const emailToCheck = email || emailInput;
+    if (!emailToCheck.trim()) return;
     
     setIsLoading(true);
     setError(null);
     try {
-      const data = await emailBranches(emailInput);
+      const data = await emailBranches(emailToCheck);
       setBreaches(data);
     } catch {
       setError('No se pudieron obtener los resultados. Por favor, intenta de nuevo.');
@@ -58,10 +69,10 @@ const EmailBreachChecker: React.FC = () => {
               </div>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Inicio</a>
-              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">API</a>
-              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Documentos</a>
-              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Soporte</a>
+              <Link to="/breach-guard" className="text-gray-600 hover:text-red-600 font-medium">Inicio</Link>
+              <Link to="/password-check" className="text-gray-600 hover:text-red-600 font-medium">Contraseñas</Link>
+              <Link to="#" className="text-gray-600 hover:text-red-600 font-medium">API</Link>
+              <Link to="#" className="text-gray-600 hover:text-red-600 font-medium">Soporte</Link>
             </nav>
           </div>
         </div>
@@ -99,7 +110,7 @@ const EmailBreachChecker: React.FC = () => {
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
             />
             <button
-              onClick={handleEmailSubmit}
+              onClick={() => handleEmailSubmit()}
               disabled={!emailInput.trim() || !isValidEmail(emailInput)}
               className="bg-red-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >

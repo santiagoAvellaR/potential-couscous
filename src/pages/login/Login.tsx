@@ -34,9 +34,9 @@ const LoginPage: React.FC = () => {
               </div>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Inicio</a>
+              <a href="/breach-guard" className="text-gray-600 hover:text-red-600 font-medium">Inicio</a>
+              <a href="/password-check" className="text-gray-600 hover:text-red-600 font-medium">Contraseñas</a>
               <a href="#" className="text-gray-600 hover:text-red-600 font-medium">API</a>
-              <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Documentos</a>
               <a href="#" className="text-gray-600 hover:text-red-600 font-medium">Soporte</a>
             </nav>
           </div>
