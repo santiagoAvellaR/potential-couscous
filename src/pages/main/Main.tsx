@@ -71,8 +71,8 @@ const EmailBreachChecker: React.FC = () => {
             <nav className="hidden md:flex space-x-8">
               <Link to="/breach-guard" className="text-gray-600 hover:text-red-600 font-medium">Inicio</Link>
               <Link to="/password-check" className="text-gray-600 hover:text-red-600 font-medium">Contraseñas</Link>
-              <Link to="#" className="text-gray-600 hover:text-red-600 font-medium">API</Link>
-              <Link to="#" className="text-gray-600 hover:text-red-600 font-medium">Soporte</Link>
+              <a href="https://transacciones-nequi.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-red-600 font-medium">Nequi</a>
+              <a href="https://enlace-academico-escuelaing-edu-co.azurewebsites.net" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-red-600 font-medium">Enlace</a>
             </nav>
           </div>
         </div>
