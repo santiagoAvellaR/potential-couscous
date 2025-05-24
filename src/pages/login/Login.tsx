@@ -1,37 +1,21 @@
-import React, { useState } from 'react';
-import { Mail, Shield, Eye, EyeOff, Lock, User } from 'lucide-react';
+import React from 'react';
+import { Shield, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; //
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleEmailLogin = async () => {
-    if (!email.trim() || !password.trim()) return;
-    
-    setIsLoading(true);
-    // Aquí se conectaría con la API de autenticación
-    console.log('Iniciando sesión con email:', email);
-    
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  };
+  const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
     console.log('Iniciando sesión con Google');
+    navigate('/google-login');
     // Aquí se integraría con Google OAuth
   };
 
   const handleMicrosoftLogin = () => {
     console.log('Iniciando sesión con Microsoft');
+    navigate('/microsoft-login');
     // Aquí se integraría con Microsoft OAuth
-  };
-
-  const isValidEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
   };
 
   return (
@@ -59,7 +43,7 @@ const LoginPage: React.FC = () => {
         </div>
       </header>
 
-      <main className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-xl mx-auto px-4 sm:px-6 lg:px-1 py-13 min-h-[300px]">
         {/* Login Card */}
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="text-center mb-8">
@@ -101,105 +85,6 @@ const LoginPage: React.FC = () => {
               </svg>
               Continuar con Microsoft
             </button>
-          </div>
-
-          {/* Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">O continúa con</span>
-            </div>
-          </div>
-
-          {/* Email/Password Form */}
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Correo electrónico
-              </label>
-              <div className="relative">
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ejemplo@correo.com"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  required
-                />
-                <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-              </div>
-              {email && !isValidEmail(email) && (
-                <p className="mt-1 text-sm text-red-600">
-                  Por favor, ingresa una dirección de correo válida
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Contraseña
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Tu contraseña"
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  required
-                />
-                <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                  Recordarme
-                </label>
-              </div>
-              <a href="#" className="text-sm text-red-600 hover:text-red-700 font-medium">
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
-
-            <button
-              onClick={handleEmailLogin}
-              disabled={!email.trim() || !password.trim() || !isValidEmail(email) || isLoading}
-              className="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
-            >
-              {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              ) : (
-                'Iniciar Sesión'
-              )}
-            </button>
-          </div>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              ¿No tienes una cuenta?{' '}
-              <a href="#" className="text-red-600 hover:text-red-700 font-medium">
-                Regístrate aquí
-              </a>
-            </p>
           </div>
 
           {/* Security Notice */}
@@ -271,7 +156,7 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 BreachGuard. Todos los derechos reservados.</p>
+            <p>&copy; 2025 BreachGuard. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>
