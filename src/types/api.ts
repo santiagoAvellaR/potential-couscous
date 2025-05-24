@@ -1,4 +1,4 @@
-export type MailApi = {
+export type MailApiResult = {
   Name: string;
   Title: string;
   Domain: string;
@@ -17,7 +17,9 @@ export type MailApi = {
   IsMalware: boolean;
   IsSubscriptionFree: boolean;
   IsStealerLog: boolean;
-} | null;
+};
+
+export type MailApi = MailApiResult[] | null;
 
 export type PasswordApi = {
   strength: {

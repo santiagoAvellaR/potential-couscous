@@ -1,35 +1,29 @@
 import axios from 'axios';
-import config from '../env.js';
-import zxcvbn from 'zxcvbn';
+import type { MailApi, PasswordApi } from '../types/api.js';
+import env from '../env.js';
 
 export const api = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com',
+  baseURL: env.API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-export const emailBranches = async (email: string) => {
-  const { data } = await api.get(
-      `https://haveibeenpwned.com/api/v3/breachedaccount/${encodeURIComponent(email)}?truncateResponse=false`,
-      { headers: { 'hibp-api-key': config.HIBP_KEY, Accept: 'application/json' } }
-    );
-  return data;
+export const emailBranches = async (email: string): Promise<MailApi> => {
+  try {
+    const { data } = await api.post('/api/breaches', { email });
+    return data as MailApi;
+  } catch (err: unknown) {
+    const e = err as Error;
+    console.error(e.message);
+    return null;
+  }
 }
 
-export const passwords = async (password: string) => {
-  const strength = zxcvbn(password);
-  const feedback = strength.feedback;
-  const crypto = await import('node:crypto');
-  const hash = crypto.createHash('sha1').update(password).digest('hex').toUpperCase();
-  const prefix = hash.slice(0, 5);
-
+export const passwords = async (password: string): Promise<PasswordApi> => {
   try {
-    const rangeRes = await api.get(`https://api.pwnedpasswords.com/range/${prefix}`);
-    const lines: string[] = (rangeRes.data as string).split('\r\n');
-    const match = lines.find(line => line.split(':')[0] === hash.slice(5));
-    const count = match ? Number.parseInt(match.split(':')[1], 10) : 0;
-    return { strength: { score: strength.score, suggestions: feedback.suggestions, warning: feedback.warning || null }, pwnedCount: count };
+    const { data } = await api.post('/api/password', { password });
+    return data as PasswordApi;
   } catch (err: unknown) {
     const e = err as Error;
     console.error(e.message);

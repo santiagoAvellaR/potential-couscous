@@ -8,8 +8,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/BreachGuard" element={<Main />} />
         <Route path="/microsoft-login" element={<MicrosoftLogin />} />
         <Route path="/google-login" element={<GoogleLogin />} />
       </Routes>
