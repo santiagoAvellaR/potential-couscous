@@ -1,8 +1,5 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-export default {
-  PORT: process.env.PORT,
-  HIBP_KEY: process.env.HIBP_KEY,
+const env = {
+  HIBP_KEY: import.meta.env.VITE_HIBP_KEY,
 };
+export default env;
+

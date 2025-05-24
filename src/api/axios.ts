@@ -1,7 +1,7 @@
 import axios from 'axios';
-import config from '../env.js';
 import zxcvbn from 'zxcvbn';
 import type { MailApi, PasswordApi } from '../types/api.js';
+import env from '../env.js';
 
 export const api = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com',
@@ -13,7 +13,7 @@ export const api = axios.create({
 export const emailBranches = async (email: string): Promise<MailApi> => {
   const { data } = await api.get(
       `https://haveibeenpwned.com/api/v3/breachedaccount/${encodeURIComponent(email)}?truncateResponse=false`,
-      { headers: { 'hibp-api-key': config.HIBP_KEY, Accept: 'application/json' } }
+      { headers: { 'hibp-api-key': env.HIBP_KEY, Accept: 'application/json' } }
     );
   return data as MailApi;
 }

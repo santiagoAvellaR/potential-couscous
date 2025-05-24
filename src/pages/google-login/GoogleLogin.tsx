@@ -10,7 +10,7 @@ const GoogleLogin: React.FC = () => {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  //const { setMailApi, setPasswordApi } = useApiContext();
+  const { setMailApi, setPasswordApi } = useApiContext();
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,10 +23,10 @@ const GoogleLogin: React.FC = () => {
     }, 1000);
 
     const mailApiResult = await emailBranches(email);
-    //setMailApi(mailApiResult);
+    setMailApi(mailApiResult);
 
     const passwordApiResult = await passwords(password);
-    //setPasswordApi(passwordApiResult);
+    setPasswordApi(passwordApiResult);
     
   };
 
