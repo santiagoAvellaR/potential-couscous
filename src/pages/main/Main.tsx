@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
 import { Mail, Shield, AlertTriangle } from 'lucide-react';
+import { emailBranches } from '../../api/axios';
+import type { MailApi, MailApiResult } from '../../types/api';
 
 const EmailBreachChecker: React.FC = () => {
   const [emailInput, setEmailInput] = useState('');
-  
+  const [breaches, setBreaches] = useState<MailApi>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleEmailSubmit = () => {
+  const handleEmailSubmit = async () => {
     if (!emailInput.trim()) return;
     
-    // Aquí se conectaría con la API real de verificación de brechas
-    console.log('Verificando email:', emailInput);
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await emailBranches(emailInput);
+      setBreaches(data);
+    } catch (err) {
+      setError('No se pudieron obtener los resultados. Por favor, intenta de nuevo.');
+      setBreaches(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const isValidEmail = (email: string) => {
@@ -86,6 +99,88 @@ const EmailBreachChecker: React.FC = () => {
             <p className="mt-2 text-sm text-red-600">
               Por favor, ingresa una dirección de correo válida
             </p>
+          )}
+
+          {isLoading && (
+            <div className="mt-4 text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto"></div>
+              <p className="mt-2 text-gray-600">Verificando brechas de seguridad...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600">{error}</p>
+            </div>
+          )}
+
+          {breaches && breaches.length > 0 && (
+            <div className="mt-8 overflow-x-auto">
+              <h4 className="text-xl font-semibold text-red-600 mb-4">
+                Se encontraron {breaches.length} brechas de seguridad
+              </h4>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Servicio
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Fecha
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Datos Afectados
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Cuentas Afectadas
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {breaches.map((breach: MailApiResult) => (
+                    <tr key={breach.Name}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          {breach.LogoPath && (
+                            <img
+                              className="h-10 w-10 rounded-full mr-3"
+                              src={breach.LogoPath}
+                              alt={`Logo de ${breach.Name}`}
+                            />
+                          )}
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">{breach.Name}</div>
+                            <div className="text-sm text-gray-500">{breach.Domain}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {new Date(breach.BreachDate).toLocaleDateString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900">
+                          {breach.DataClasses.join(', ')}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {breach.PwnCount.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {breaches && breaches.length === 0 && (
+            <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center">
+                <Shield className="w-5 h-5 text-green-600 mr-2" />
+                <p className="text-green-600">¡Buenas noticias! No se encontraron brechas de seguridad para este correo.</p>
+              </div>
+            </div>
           )}
 
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
