@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Shield, AlertTriangle } from 'lucide-react';
+import { Mail, Shield, AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { emailBranches } from '../../api/axios';
 import type { MailApi, MailApiResult } from '../../types/api';
 
@@ -8,6 +8,8 @@ const EmailBreachChecker: React.FC = () => {
   const [breaches, setBreaches] = useState<MailApi>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const handleEmailSubmit = async () => {
     if (!emailInput.trim()) return;
@@ -17,7 +19,7 @@ const EmailBreachChecker: React.FC = () => {
     try {
       const data = await emailBranches(emailInput);
       setBreaches(data);
-    } catch (err) {
+    } catch {
       setError('No se pudieron obtener los resultados. Por favor, intenta de nuevo.');
       setBreaches(null);
     } finally {
@@ -28,6 +30,16 @@ const EmailBreachChecker: React.FC = () => {
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const totalPages = breaches ? Math.ceil(breaches.length / itemsPerPage) : 0;
+  const paginatedBreaches = breaches?.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -115,62 +127,210 @@ const EmailBreachChecker: React.FC = () => {
           )}
 
           {breaches && breaches.length > 0 && (
-            <div className="mt-8 overflow-x-auto">
+            <div className="mt-8">
               <h4 className="text-xl font-semibold text-red-600 mb-4">
                 Se encontraron {breaches.length} brechas de seguridad
               </h4>
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Servicio
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Fecha
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Datos Afectados
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Cuentas Afectadas
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {breaches.map((breach: MailApiResult) => (
-                    <tr key={breach.Name}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          {breach.LogoPath && (
-                            <img
-                              className="h-10 w-10 rounded-full mr-3"
-                              src={breach.LogoPath}
-                              alt={`Logo de ${breach.Name}`}
-                            />
-                          )}
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">{breach.Name}</div>
-                            <div className="text-sm text-gray-500">{breach.Domain}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {new Date(breach.BreachDate).toLocaleDateString()}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">
-                          {breach.DataClasses.join(', ')}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {breach.PwnCount.toLocaleString()}
-                      </td>
+              
+              {/* Tabla para pantallas medianas y grandes */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Servicio
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Fecha
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Datos Afectados
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Cuentas Afectadas
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {paginatedBreaches?.map((breach: MailApiResult) => (
+                      <tr key={breach.Name}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            {breach.LogoPath && (
+                              <img
+                                className="h-10 w-10 rounded-full mr-3"
+                                src={breach.LogoPath}
+                                alt={`Logo de ${breach.Name}`}
+                              />
+                            )}
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">{breach.Name}</div>
+                              <div className="text-sm text-gray-500">{breach.Domain}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {new Date(breach.BreachDate).toLocaleDateString()}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm text-gray-900">
+                            {breach.DataClasses.join(', ')}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {breach.PwnCount.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Cards para móviles */}
+              <div className="md:hidden space-y-4">
+                {paginatedBreaches?.map((breach: MailApiResult) => (
+                  <div key={breach.Name} className="bg-white rounded-lg shadow-md p-4">
+                    <div className="flex items-center mb-3">
+                      {breach.LogoPath && (
+                        <img
+                          className="h-12 w-12 rounded-full mr-3"
+                          src={breach.LogoPath}
+                          alt={`Logo de ${breach.Name}`}
+                        />
+                      )}
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900">{breach.Name}</h3>
+                        <p className="text-sm text-gray-500">{breach.Domain}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div>
+                        <span className="text-sm font-medium text-gray-500">Fecha:</span>
+                        <span className="text-sm text-gray-900 ml-2">
+                          {new Date(breach.BreachDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-500">Cuentas afectadas:</span>
+                        <span className="text-sm text-gray-900 ml-2">
+                          {breach.PwnCount.toLocaleString()}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-500">Datos comprometidos:</span>
+                        <p className="text-sm text-gray-900 mt-1">
+                          {breach.DataClasses.join(', ')}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Controles de paginación */}
+              {totalPages > 1 && (
+                <div className="mt-4 flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+                  <div className="flex flex-1 justify-between sm:hidden">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    >
+                      Anterior
+                    </button>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    >
+                      Siguiente
+                    </button>
+                  </div>
+                  <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-sm text-gray-700">
+                        Mostrando <span className="font-medium">{((currentPage - 1) * itemsPerPage) + 1}</span> a{' '}
+                        <span className="font-medium">
+                          {Math.min(currentPage * itemsPerPage, breaches.length)}
+                        </span> de{' '}
+                        <span className="font-medium">{breaches.length}</span> resultados
+                      </p>
+                    </div>
+                    <div>
+                      <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        >
+                          <span className="sr-only">Anterior</span>
+                          <ChevronLeft className="h-5 w-5" />
+                        </button>
+
+                        {/* Primera página */}
+                        <button
+                          onClick={() => handlePageChange(1)}
+                          className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
+                            currentPage === 1
+                              ? 'z-10 bg-red-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600'
+                              : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
+                          }`}
+                        >
+                          1
+                        </button>
+
+                        {/* Ellipsis izquierdo */}
+                        {currentPage > 3 && (
+                          <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">
+                            ...
+                          </span>
+                        )}
+
+                        {/* Página actual (si no es la primera ni la última) */}
+                        {currentPage !== 1 && currentPage !== totalPages && (
+                          <button
+                            className="z-10 bg-red-600 text-white relative inline-flex items-center px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                          >
+                            {currentPage}
+                          </button>
+                        )}
+
+                        {/* Ellipsis derecho */}
+                        {currentPage < totalPages - 2 && (
+                          <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">
+                            ...
+                          </span>
+                        )}
+
+                        {/* Última página */}
+                        {totalPages > 1 && (
+                          <button
+                            onClick={() => handlePageChange(totalPages)}
+                            className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
+                              currentPage === totalPages
+                                ? 'z-10 bg-red-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600'
+                                : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
+                            }`}
+                          >
+                            {totalPages}
+                          </button>
+                        )}
+
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        >
+                          <span className="sr-only">Siguiente</span>
+                          <ChevronRight className="h-5 w-5" />
+                        </button>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
